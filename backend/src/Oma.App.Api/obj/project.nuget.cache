@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "9l+Bg/llFA0=",
+  "success": true,
+  "projectFilePath": "/home/rocha/projects/oma-app/backend/src/Oma.App.Api/Oma.App.Api.csproj",
+  "expectedPackageFiles": [
+    "/home/rocha/.nuget/packages/microsoft.aspnetcore.openapi/8.0.25/microsoft.aspnetcore.openapi.8.0.25.nupkg.sha512",
+    "/home/rocha/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "/home/rocha/.nuget/packages/microsoft.openapi/1.6.14/microsoft.openapi.1.6.14.nupkg.sha512",
+    "/home/rocha/.nuget/packages/swashbuckle.aspnetcore/6.6.2/swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
+    "/home/rocha/.nuget/packages/swashbuckle.aspnetcore.swagger/6.6.2/swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
+    "/home/rocha/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.6.2/swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",
+    "/home/rocha/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.6.2/swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512",
+    "/home/rocha/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.25/microsoft.aspnetcore.app.ref.8.0.25.nupkg.sha512",
+    "/home/rocha/.nuget/packages/microsoft.netcore.app.host.linux-x64/8.0.25/microsoft.netcore.app.host.linux-x64.8.0.25.nupkg.sha512"
+  ],
+  "logs": []
+}

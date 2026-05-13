@@ -1,0 +1,5 @@
+# Root env files
+.env
+
+# Keep template tracked
+!.env.example

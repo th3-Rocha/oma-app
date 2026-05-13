@@ -1,0 +1,56 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Oma.App.Infrastructure/1.0.0": {
+        "dependencies": {
+          "Oma.App.Application": "1.0.0",
+          "Oma.App.Domain": "1.0.0"
+        },
+        "runtime": {
+          "Oma.App.Infrastructure.dll": {}
+        }
+      },
+      "Oma.App.Application/1.0.0": {
+        "dependencies": {
+          "Oma.App.Domain": "1.0.0"
+        },
+        "runtime": {
+          "Oma.App.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Oma.App.Domain/1.0.0": {
+        "runtime": {
+          "Oma.App.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Oma.App.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Oma.App.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Oma.App.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

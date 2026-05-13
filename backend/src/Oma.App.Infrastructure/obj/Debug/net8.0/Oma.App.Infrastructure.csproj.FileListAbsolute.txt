@@ -1,0 +1,17 @@
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/bin/Debug/net8.0/Oma.App.Infrastructure.deps.json
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/bin/Debug/net8.0/Oma.App.Infrastructure.dll
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/bin/Debug/net8.0/Oma.App.Infrastructure.pdb
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/bin/Debug/net8.0/Oma.App.Application.dll
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/bin/Debug/net8.0/Oma.App.Domain.dll
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/bin/Debug/net8.0/Oma.App.Application.pdb
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/bin/Debug/net8.0/Oma.App.Domain.pdb
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/obj/Debug/net8.0/Oma.App.Infrastructure.csproj.AssemblyReference.cache
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/obj/Debug/net8.0/Oma.App.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/obj/Debug/net8.0/Oma.App.Infrastructure.AssemblyInfoInputs.cache
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/obj/Debug/net8.0/Oma.App.Infrastructure.AssemblyInfo.cs
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/obj/Debug/net8.0/Oma.App.Infrastructure.csproj.CoreCompileInputs.cache
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/obj/Debug/net8.0/Oma.App..961F413B.Up2Date
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/obj/Debug/net8.0/Oma.App.Infrastructure.dll
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/obj/Debug/net8.0/refint/Oma.App.Infrastructure.dll
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/obj/Debug/net8.0/Oma.App.Infrastructure.pdb
+/home/rocha/projects/oma-app/backend/src/Oma.App.Infrastructure/obj/Debug/net8.0/ref/Oma.App.Infrastructure.dll
