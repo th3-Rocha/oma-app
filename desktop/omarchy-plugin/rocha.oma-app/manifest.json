@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "rocha.oma-app",
+  "name": "Oma App",
+  "version": "1.0.0",
+  "author": "rocha",
+  "license": "MIT",
+  "description": "Shows whether the oma-app backend is running and whether a phone is connected",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Oma App",
+    "description": "oma-app backend status",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

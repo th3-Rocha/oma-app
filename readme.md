@@ -41,6 +41,13 @@ scripts/install.sh --firewall   # idem + libera a porta 43658 (TCP e UDP) no ufw
 - Remover: `scripts/uninstall.sh`
 - Rodar do código-fonte, em outra porta: `scripts/dev.sh`
 
+### Widget na barra do Omarchy
+
+O `install.sh` também instala o plugin `rocha.oma-app` (em `desktop/omarchy-plugin/`) na barra:
+ícone apagado = backend rodando sem celular, ícone + número = celulares conectados, vermelho = backend parado.
+Passe o mouse para ver quem está conectado/pareado; clique esquerdo manda os detalhes numa notificação,
+clique do meio reinicia o serviço. Ele lê `localhost:43658/api/local/status` (só acessível do próprio PC).
+
 ### Wake-on-LAN
 
 O pacote mágico sai do celular, então só funciona no mesmo Wi-Fi/rede do PC. No PC:

@@ -52,6 +52,20 @@ systemctl --user daemon-reload
 systemctl --user enable --now oma-app.service
 systemctl --user restart oma-app.service
 
+# Bar widget for the Omarchy shell: shows whether the backend is up and who is connected.
+PLUGIN_SRC="$ROOT/desktop/omarchy-plugin/rocha.oma-app"
+PLUGIN_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/plugins/rocha.oma-app"
+if command -v omarchy >/dev/null && [ -d "$PLUGIN_SRC" ]; then
+  echo "==> Widget da barra (rocha.oma-app)"
+  mkdir -p "$PLUGIN_DIR"
+  cp "$PLUGIN_SRC"/* "$PLUGIN_DIR/"
+  if ! grep -q '"rocha.oma-app"' "${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/shell.json" 2>/dev/null; then
+    omarchy-shell shell rescanPlugins >/dev/null 2>&1 || true # a freshly copied plugin is unknown until a rescan
+    sleep 1
+    omarchy plugin enable rocha.oma-app --section right || echo "   (habilite depois: omarchy plugin enable rocha.oma-app --section right)"
+  fi
+fi
+
 if [ "${1:-}" = "--firewall" ] && command -v ufw >/dev/null; then
   SUBNET="$(ip -4 route show scope link | awk '!/docker|br-/ {print $1; exit}')"
   echo "==> Liberando a porta $PORT para $SUBNET no ufw"

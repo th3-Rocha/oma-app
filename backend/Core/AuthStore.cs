@@ -88,10 +88,12 @@ public sealed class AuthStore
         }
     }
 
-    public bool Validate(string? token)
+    public bool Validate(string? token) => Find(token) is not null;
+
+    public PairedDevice? Find(string? token)
     {
-        if (string.IsNullOrEmpty(token)) return false;
-        lock (_gate) return _devices.Any(device => Same(token, device.Token));
+        if (string.IsNullOrEmpty(token)) return null;
+        lock (_gate) return _devices.FirstOrDefault(device => Same(token, device.Token));
     }
 
     public bool Remove(string id)

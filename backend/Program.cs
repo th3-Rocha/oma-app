@@ -19,6 +19,7 @@ builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
 
 builder.Services.AddSingleton(config);
 builder.Services.AddSingleton<AuthStore>();
+builder.Services.AddSingleton<ClientTracker>();
 builder.Services.AddSingleton<AppCatalog>();
 builder.Services.AddSingleton<PowerService>();
 builder.Services.AddSingleton<NatureMixer>();
@@ -26,29 +27,45 @@ builder.Services.AddHostedService<DiscoveryService>();
 
 var app = builder.Build();
 var auth = app.Services.GetRequiredService<AuthStore>();
+var clients = app.Services.GetRequiredService<ClientTracker>();
 
 app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(20) });
 
 // Everything under /api and /ws needs a paired device's token, except discovery and pairing.
+// /api/local/* is for the desktop itself (the bar widget): loopback only, no token.
 app.Use(async (context, next) =>
 {
     var path = context.Request.Path.Value ?? "";
-    var guarded = (path.StartsWith("/api/") || path.StartsWith("/ws/"))
-        && path != "/api/ping" && !path.StartsWith("/api/pair/");
-    if (guarded && config.Auth)
+    var remote = context.Connection.RemoteIpAddress;
+
+    if (path.StartsWith("/api/local/"))
     {
-        var header = context.Request.Headers.Authorization.ToString();
-        var token = header.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)
-            ? header[7..].Trim()
-            : context.Request.Query["token"].ToString();
-        if (!auth.Validate(token))
+        if (remote is null || !IPAddress.IsLoopback(remote))
         {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsJsonAsync(new { error = "unauthorized" });
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
             return;
         }
+
+        await next();
+        return;
     }
 
+    var header = context.Request.Headers.Authorization.ToString();
+    var token = header.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)
+        ? header[7..].Trim()
+        : context.Request.Query["token"].ToString();
+    var device = auth.Find(token);
+
+    var guarded = (path.StartsWith("/api/") || path.StartsWith("/ws/"))
+        && path != "/api/ping" && !path.StartsWith("/api/pair/");
+    if (guarded && config.Auth && device is null)
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        await context.Response.WriteAsJsonAsync(new { error = "unauthorized" });
+        return;
+    }
+
+    if (path.StartsWith("/api/") || path.StartsWith("/ws/")) clients.Touch(remote, device?.Name);
     await next();
 });
 
@@ -80,6 +97,22 @@ app.MapGet("/api/pair/code", (HttpContext context) =>
     context.Connection.RemoteIpAddress is { } ip && IPAddress.IsLoopback(ip)
         ? Results.Ok(new { code = auth.PendingCode })
         : Results.StatusCode(StatusCodes.Status403Forbidden));
+
+app.MapGet("/api/local/status", () =>
+{
+    var nic = NetInfo.Primary();
+    return Results.Ok(new
+    {
+        running = true,
+        version = OmaConfig.Version,
+        port = config.Port,
+        ip = nic.Ip,
+        uptimeSec = (long)(DateTime.UtcNow - clients.StartedAt).TotalSeconds,
+        paired = auth.Devices.Select(d => d.Name).ToList(),
+        connected = clients.Connected(),
+        pairingCode = auth.PendingCode,
+    });
+});
 
 app.MapGet("/api/devices", () => Results.Ok(auth.Devices.Select(d => new { d.Id, d.Name, d.CreatedAt })));
 app.MapDelete("/api/devices/{id}", (string id) => auth.Remove(id) ? Results.Ok(new { ok = true }) : Results.NotFound());
