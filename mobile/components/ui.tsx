@@ -120,7 +120,8 @@ export function Screen({ title, subtitle, back = true, right, scroll = true, chi
 
   return (
     <SafeAreaView style={s.safe}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+      {/* Android is edge-to-edge, so the window no longer resizes for the keyboard by itself. */}
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
         <View style={s.header}>
           {back ? (
             <Pressable

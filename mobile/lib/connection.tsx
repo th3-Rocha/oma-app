@@ -49,8 +49,10 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
   const serverRef = useRef<Server | null>(null);
   serverRef.current = server;
   const offlineChecks = useRef(0);
+  const wasOnline = useRef(false);
 
   const setServer = useCallback(async (next: Server | null) => {
+    if (next?.host !== serverRef.current?.host) wasOnline.current = false;
     serverRef.current = next;
     setServerState(next);
     setPaired(!!next?.token);
@@ -136,6 +138,7 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
 
     if (info) {
       offlineChecks.current = 0;
+      wasOnline.current = true;
       setOnline(true);
       // The PC is the source of truth for its own MAC and name.
       if ((info.mac && info.mac !== current.mac) || info.hostname !== current.hostname) {
@@ -144,8 +147,11 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
       return true;
     }
 
-    setOnline(false);
     offlineChecks.current += 1;
+    // One dropped ping on Wi-Fi is not "offline": wait for a second miss before flipping the UI.
+    if (wasOnline.current && offlineChecks.current < 2) return true;
+    wasOnline.current = false;
+    setOnline(false);
     // DHCP may have moved the PC: every few misses, ask the network who has our MAC.
     if (current.mac && offlineChecks.current % 4 === 0) {
       const found = (await udpDiscover(current.port, 900)).find((item) => item.mac === current.mac);
