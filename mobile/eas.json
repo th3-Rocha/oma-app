@@ -1,0 +1,13 @@
+{
+  "cli": {
+    "version": ">= 12.0.0",
+    "requireCommit": true,
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "preview": {
+      "distribution": "internal",
+      "android": { "buildType": "apk" }
+    }
+  }
+}

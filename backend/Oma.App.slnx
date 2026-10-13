@@ -1,8 +1,0 @@
-<Solution>
-  <Folder Name="/src/">
-    <Project Path="src/Oma.App.Api/Oma.App.Api.csproj" />
-    <Project Path="src/Oma.App.Application/Oma.App.Application.csproj" />
-    <Project Path="src/Oma.App.Domain/Oma.App.Domain.csproj" />
-    <Project Path="src/Oma.App.Infrastructure/Oma.App.Infrastructure.csproj" />
-  </Folder>
-</Solution>

@@ -1,0 +1,12 @@
+# EAS uploads the whole repository; only mobile/ is needed for the app build.
+backend/
+sounds/
+scripts/
+.env
+
+node_modules/
+.expo/
+dist/
+android/
+ios/
+*.apk

@@ -1,5 +1,28 @@
-# Root env files
+# secrets / local env
 .env
+*.local
 
-# Keep template tracked
-!.env.example
+# .NET
+bin/
+obj/
+
+# node / expo
+node_modules/
+.expo/
+dist/
+mobile/android/
+mobile/ios/
+*.tsbuildinfo
+expo-env.d.ts
+
+# builds
+*.apk
+*.aab
+
+# ambient sounds are hundreds of MB each: far over GitHub's 100 MB file limit
+sounds/**/*.mp3
+sounds/**/*.ogg
+sounds/**/*.opus
+sounds/**/*.flac
+sounds/**/*.wav
+sounds/**/*.m4a

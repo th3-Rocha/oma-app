@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content" />
+<title>oma terminal</title>
+<link rel="stylesheet" href="vendor/xterm.css" />
+<style>
+  html, body { margin: 0; height: 100%; background: #101315; overflow: hidden; }
+  #term { position: absolute; inset: 0; padding: 4px; box-sizing: border-box; }
+  .xterm-viewport { overflow-y: auto !important; }
+</style>
+</head>
+<body>
+<div id="term"></div>
+<script src="vendor/xterm.js"></script>
+<script src="vendor/addon-fit.js"></script>
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var token = params.get('token') || '';
+  var tmux = params.get('tmux') === '1';
+  var bg = params.get('bg') || '#101315';
+  var fg = params.get('fg') || '#a5aeb4';
+  var accent = params.get('accent') || '#798186';
+  document.body.style.background = bg;
+
+  var term = new Terminal({
+    cursorBlink: true,
+    fontFamily: 'monospace',
+    fontSize: Number(params.get('size')) || 13,
+    scrollback: 5000,
+    allowProposedApi: true,
+    theme: { background: bg, foreground: fg, cursor: accent, selectionBackground: accent + '66' },
+  });
+  var fit = new FitAddon.FitAddon();
+  term.loadAddon(fit);
+  term.open(document.getElementById('term'));
+
+  var socket = null;
+  var encoder = new TextEncoder();
+  var ctrlArmed = false;
+
+  function post(message) {
+    if (window.ReactNativeWebView) window.ReactNativeWebView.postMessage(JSON.stringify(message));
+  }
+
+  function sendResize() {
+    if (socket && socket.readyState === 1) {
+      socket.send(JSON.stringify({ type: 'resize', cols: term.cols, rows: term.rows }));
+    }
+  }
+
+  function refit() {
+    try { fit.fit(); } catch (e) {}
+    sendResize();
+  }
+
+  function send(data) {
+    if (ctrlArmed && data.length === 1) {
+      var code = data.toUpperCase().charCodeAt(0);
+      if (code >= 64 && code <= 95) data = String.fromCharCode(code - 64);
+      ctrlArmed = false;
+      post({ type: 'ctrl', armed: false });
+    }
+    if (socket && socket.readyState === 1) socket.send(encoder.encode(data));
+  }
+
+  function connect() {
+    if (socket) { try { socket.close(); } catch (e) {} }
+    refit();
+    var scheme = location.protocol === 'https:' ? 'wss://' : 'ws://';
+    var url = scheme + location.host + '/ws/terminal?cols=' + term.cols + '&rows=' + term.rows
+      + '&token=' + encodeURIComponent(token) + (tmux ? '&tmux=1' : '');
+    post({ type: 'status', state: 'connecting' });
+    var current = new WebSocket(url);
+    current.binaryType = 'arraybuffer';
+    socket = current;
+    current.onopen = function () { post({ type: 'status', state: 'open' }); sendResize(); term.focus(); };
+    current.onmessage = function (event) {
+      if (typeof event.data === 'string') term.write(event.data);
+      else term.write(new Uint8Array(event.data));
+    };
+    current.onclose = function () {
+      if (socket !== current) return;
+      term.write('\r\n\x1b[2m[sessão encerrada]\x1b[0m\r\n');
+      post({ type: 'status', state: 'closed' });
+    };
+  }
+
+  term.onData(send);
+  term.onBinary(function (data) { send(data); });
+  new ResizeObserver(refit).observe(document.getElementById('term'));
+  window.addEventListener('resize', refit);
+
+  // Called from the app's key bar
+  window.omaSend = function (data) { send(data); };
+  window.omaCtrl = function (armed) { ctrlArmed = !!armed; };
+  window.omaFocus = function () { term.focus(); };
+  window.omaBlur = function () { term.blur(); };
+  window.omaReconnect = connect;
+  window.omaFont = function (delta) {
+    term.options.fontSize = Math.max(8, Math.min(24, term.options.fontSize + delta));
+    refit();
+  };
+
+  connect();
+})();
+</script>
+</body>
+</html>

@@ -42,3 +42,8 @@ app-example
 # generated native folders
 /ios
 /android
+/backend/src/Oma.App.Api/Abstractions/Nature
+node_modules/
+.expo/
+android/
+ios/
